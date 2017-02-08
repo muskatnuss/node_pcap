@@ -49,8 +49,12 @@ function TCPSession(key) {
     this.__internal_key = key;
 
     this.src = null;
+    this.src_addr = null;
+    this.src_port = null;
     this.src_name = null; // from DNS
     this.dst = null;
+    this.dst_addr = null;
+    this.dst_port = null;
     this.dst_name = null; // from DNS
 
     this.state = null;
@@ -96,8 +100,12 @@ TCPSession.prototype.track = function (packet) {
 
     if (this.state === null) {
         this.src = src; // the side the sent the first packet we saw
+        this.src_addr = ip.saddr;
+        this.src_port = tcp.sport;
         this.src_name = src;
         this.dst = dst; // the side that the first packet we saw was sent to
+        this.dst_addr = ip.daddr;
+        this.dst_port = tcp.dport;
         this.dst_name = dst;
 
         if (tcp.flags.syn && !tcp.flags.ack) { // initial SYN, best case
