@@ -28,7 +28,8 @@ TCPTracker.prototype.track_packet = function (packet) {
         session = this.sessions[key];
         if (! session) {
             is_new = true;
-            session = new TCPSession();
+            session = new TCPSession(key);
+            session.on("end", session => { delete this.sessions[session.__internal_key]; })
             this.sessions[key] = session;
         }
 
@@ -44,7 +45,9 @@ TCPTracker.prototype.track_packet = function (packet) {
     // user should filter these out with their pcap filter, but oh well.
 };
 
-function TCPSession() {
+function TCPSession(key) {
+    this.__internal_key = key;
+
     this.src = null;
     this.src_name = null; // from DNS
     this.dst = null;
