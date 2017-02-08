@@ -49,7 +49,10 @@ EthernetPacket.prototype.decode = function (raw_packet, offset) {
             this.payload = "need to implement LLDP";
             break;
         default:
+            /*
             console.log("node_pcap: EthernetFrame() - Don't know how to decode ethertype " + this.ethertype);
+            */
+            break;
         }
     }
 
