@@ -40,9 +40,13 @@ TCPTracker.prototype.track_packet = function (packet) {
         if (is_new) {
             this.emit("session", session);
         }
+
+        return session;
     }
+
     // silently ignore any non IPv4 TCP packets
     // user should filter these out with their pcap filter, but oh well.
+    return null;
 };
 
 function TCPSession(key) {
