@@ -27,6 +27,11 @@ TCPTracker.prototype.track_packet = function (packet) {
         var is_new = false;
         session = this.sessions[key];
         if (! session) {
+            // Handle the case where we get garbage data:
+            // If no matching session can be found, ignore any packets until a SYN packet is found (which initiates a session).
+            if (!tcp.flags.syn || tcp.flags.ack)
+                return null;
+
             is_new = true;
             session = new TCPSession(key);
             session.on("end", session => { delete this.sessions[session.__internal_key]; })
